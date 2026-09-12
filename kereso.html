@@ -910,13 +910,37 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
       return match ? match[1] : null;
     }
 
+    function parseCsvLine(text) {
+      const result = [];
+      let cur = '';
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (c === '"') {
+          if (inQuotes && text[i + 1] === '"') {
+            cur += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (c === ';' && !inQuotes) {
+          result.push(cur);
+          cur = '';
+        } else {
+          cur += c;
+        }
+      }
+      result.push(cur);
+      return result;
+    }
+
     function parseCsv(text) {
       const lines = text.trim().split(/\r?\n/);
       const programs = [];
       for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
-        const cols = line.split(';');
+        const cols = parseCsvLine(line);
         const day = (cols[0] || '').trim();
         const cat = (cols[1] || '').trim();
         const title = formatHungarianTitle(cols[2] || '');
@@ -928,9 +952,9 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
         programs.push({
           id: i,
           day: day,
-          dayLabel: DAY_LABELS[day.toLowerCase()] || day.charAt(0).toUpperCase() + day.slice(1),
+          dayLabel: DAY_LABELS[day.toLowerCase()] || (day ? day.charAt(0).toUpperCase() + day.slice(1) : ''),
           category: cat,
-          categoryLabel: (CATEGORY_COLORS[cat.toLowerCase()] && CATEGORY_COLORS[cat.toLowerCase()].label) || cat,
+          categoryLabel: (CATEGORY_COLORS[cat.toLowerCase()] && CATEGORY_COLORS[cat.toLowerCase()].label) || (cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : 'Egyéb'),
           title: title,
           description: desc,
           link: link,
@@ -1183,7 +1207,7 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
     async function init() {
       let csvContent = '';
       try {
-        const res = await fetch('progaj.csv');
+        const res = await fetch('progaj.csv?t=' + Date.now(), { cache: 'no-cache' });
         if (res.ok) csvContent = await res.text();
       } catch (e) {}
 
