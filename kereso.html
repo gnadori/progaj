@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarka-barka programajánló</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-surface: #f1f5f9;
+      --border-color: #e2e8f0;
+      --border-subtle: #edf2f7;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --accent-primary: #4f46e5;
+      --accent-soft: rgba(79, 70, 229, 0.08);
+      --accent-gradient: linear-gradient(135deg, #4f46e5, #7c3aed);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-body);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-pres-launch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-pres-launch:hover {
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .hero-section {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      padding: 3rem 1.5rem 2rem;
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .hero-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--accent-soft);
+      color: var(--accent-primary);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.125rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto 1.75rem;
+    }
+
+    .search-filter-wrapper {
+      max-width: 1280px;
+      margin: -1.5rem auto 1.5rem;
+      padding: 0 1.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .search-filter-box {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .search-input-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1.1rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.95rem 3rem 0.95rem 3.1rem;
+      font-size: 1.05rem;
+      font-family: var(--font-sans);
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      background: #ffffff;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 1rem;
+      background: #e2e8f0;
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    .clear-search-btn:hover {
+      background: #cbd5e1;
+    }
+
+    .filters-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-group-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-right: 0.25rem;
+    }
+
+    .chip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .chip-btn:hover {
+      background: #e2e8f0;
+      color: var(--text-primary);
+    }
+
+    .chip-btn.active {
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+    }
+
+    .toolbar-row {
+      max-width: 1280px;
+      margin: 0 auto 1.5rem;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .results-count {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .results-count strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .toolbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sort-select {
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      cursor: pointer;
+      outline: none;
+    }
+
+    .view-toggle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.2s ease;
+    }
+
+    .view-toggle-btn:hover, .view-toggle-btn.active {
+      background: var(--bg-surface);
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+    }
+
+    .catalog-container {
+      max-width: 1280px;
+      margin: 0 auto 4rem;
+      padding: 0 1.5rem;
+      flex: 1;
+      width: 100%;
+    }
+
+    .program-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .program-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .program-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: #cbd5e1;
+    }
+
+    .card-media-wrapper {
+      height: 190px;
+      background: #0f172a;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-media-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .program-card:hover .card-media-wrapper img {
+      transform: scale(1.04);
+    }
+
+    .card-media-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.5rem;
+      text-align: center;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #ffffff;
+    }
+
+    .card-media-placeholder .icon {
+      font-size: 2.75rem;
+    }
+
+    .yt-badge-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 52px;
+      height: 52px;
+      background: rgba(220, 38, 38, 0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .yt-badge-overlay svg {
+      margin-left: 3px;
+    }
+
+    .program-card:hover .yt-badge-overlay {
+      background: #dc2626;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .card-body {
+      padding: 1.25rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.775rem;
+      font-weight: 600;
+    }
+
+    .card-badge-day {
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+    }
+
+    .card-description {
+      font-size: 0.925rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+
+    .card-footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .btn-pres-card {
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 0.9rem;
+      background: var(--accent-soft);
+      color: var(--accent-primary);
+      border: 1px solid rgba(79, 70, 229, 0.2);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-pres-card:hover {
+      background: var(--accent-primary);
+      color: #ffffff;
+      border-color: var(--accent-primary);
+    }
+
+    .btn-ext-card {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-ext-card:hover {
+      background: #e2e8f0;
+      color: var(--text-primary);
+    }
+
+    /* Listanézet */
+    .program-grid.list-view {
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+
+    .program-grid.list-view .program-card {
+      flex-direction: row;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+    }
+
+    .program-grid.list-view .card-media-wrapper {
+      width: 100px;
+      height: 75px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .program-grid.list-view .card-body {
+      padding: 0 1.25rem;
+      flex-direction: row;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .program-grid.list-view .card-content-col {
+      flex: 1;
+    }
+
+    .program-grid.list-view .card-description {
+      margin-bottom: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .program-grid.list-view .card-footer-actions {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+      flex-shrink: 0;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1.5rem;
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border-color);
+      grid-column: 1 / -1;
+    }
+
+    .empty-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-desc {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-reset-filters {
+      padding: 0.6rem 1.2rem;
+      background: var(--accent-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Videó Modal */
+    .video-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .video-modal-overlay.active {
+      display: flex;
+    }
+
+    .video-modal-content {
+      width: 100%;
+      max-width: 900px;
+      background: #0f172a;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .video-modal-header {
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    .video-modal-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 1rem;
+    }
+
+    .video-modal-close {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.75rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .video-modal-body {
+      position: relative;
+      padding-top: 56.25%;
+      background: #000000;
+    }
+
+    .video-modal-body iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      padding: 2rem 1.5rem;
+      margin-top: auto;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 1.85rem;
+      }
+      .program-grid {
+        grid-template-columns: 1fr;
+      }
+      .program-grid.list-view .program-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .program-grid.list-view .card-media-wrapper {
+        width: 100%;
+        height: 180px;
+      }
+      .program-grid.list-view .card-body {
+        padding: 1.25rem;
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filters-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="kereso.html" class="brand">
+        <div class="brand-icon">✨</div>
+        <span class="brand-title">Tarka-barka programajánló</span>
+      </a>
+
+      <div class="header-actions">
+        <a href="prezentacio.html" class="btn-pres-launch" title="Programok bemutatása diavetítésként">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Diavetítés indítása
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero-section">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span>📅</span> Jövő heti kulturális és szabadidős ajánló
+      </div>
+      <h1 class="hero-title">Tarka-barka programajánló</h1>
+      <p class="hero-subtitle">Válogass a jövő hét legizgalmasabb mozijai, koncertjei, kiállításai és egyéb kulturális eseményei között!</p>
+    </div>
+  </section>
+
+  <div class="search-filter-wrapper">
+    <div class="search-filter-box">
+      <div class="search-input-group">
+        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="search-input" 
+          placeholder="Keresés a programok között (cím, leírás, műfaj vagy nap)..." 
+          autocomplete="off"
+        />
+        <button type="button" class="clear-search-btn" id="clearSearchBtn" title="Keresés törlése">&times;</button>
+      </div>
+
+      <div class="filters-row">
+        <div class="filter-group" id="categoryFilters">
+          <span class="filter-group-label">Kategória:</span>
+          <button type="button" class="chip-btn active" data-category="all">Összes</button>
+          <button type="button" class="chip-btn" data-category="mozi">🎬 Mozi</button>
+          <button type="button" class="chip-btn" data-category="koncert">🎵 Koncert</button>
+          <button type="button" class="chip-btn" data-category="kiállítás">🎨 Kiállítás</button>
+          <button type="button" class="chip-btn" data-category="dolog">✨ Egyéb program</button>
+        </div>
+      </div>
+
+      <div class="filters-row">
+        <div class="filter-group" id="dayFilters">
+          <span class="filter-group-label">Nap:</span>
+          <button type="button" class="chip-btn active" data-day="all">Összes nap</button>
+          <button type="button" class="chip-btn" data-day="egész héten">Egész héten</button>
+          <button type="button" class="chip-btn" data-day="hétfő">Hétfő</button>
+          <button type="button" class="chip-btn" data-day="szerda">Szerda</button>
+          <button type="button" class="chip-btn" data-day="csütörtök">Csütörtök</button>
+          <button type="button" class="chip-btn" data-day="péntek">Péntek</button>
+          <button type="button" class="chip-btn" data-day="szombat">Szombat</button>
+          <button type="button" class="chip-btn" data-day="vasárnap">Vasárnap</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toolbar-row">
+    <div class="results-count" id="resultsCount">
+      Összesen <strong>17 program</strong>
+    </div>
+
+    <div class="toolbar-controls">
+      <select id="sortSelect" class="sort-select">
+        <option value="original">Eredeti sorrend</option>
+        <option value="day">Időrend (napok szerint)</option>
+        <option value="title">Cím szerint (A–Z)</option>
+      </select>
+
+      <button type="button" class="view-toggle-btn active" id="gridBtn" title="Kártyanézet">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </button>
+      <button type="button" class="view-toggle-btn" id="listBtn" title="Listanézet">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <main class="catalog-container">
+    <div class="program-grid" id="programGrid"></div>
+  </main>
+
+  <div class="video-modal-overlay" id="videoModal">
+    <div class="video-modal-content">
+      <div class="video-modal-header">
+        <span class="video-modal-title" id="videoModalTitle">Videó lejátszása</span>
+        <button class="video-modal-close" id="closeVideoModalBtn">&times;</button>
+      </div>
+      <div class="video-modal-body" id="videoModalBody"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>Tarka-barka programajánló</strong> • Készült a jövő heti kulturális ajánlóhoz</p>
+  </footer>
+
+  <script>
+    const FALLBACK_CSV = `Mikor;Milyen dolog;Micsoda;Leírás;Link;Képlink
+egész héten;kiállítás;Voltunk, mint ti. Arcrekonstrukciók a római korból;Antropológiai és genetikai vizsgálatok alapján próbálják rekonstruálni, kik éltek itt a római korban.;https://www.aquincum.hu/kiallitas/voltunk-mint-ti-arcrekonstrukciok-romai-korbol/;
+hétfő;mozi;Ádám almái;Egy hitetlen neonáci és egy hívő pap, meg egy almafa. Mi kellhet még?;https://www.bemmozi.hu/film.php?slug=%C3%A1d%C3%A1m-alm%C3%A1i-adams-aebler-bemutat%C3%B3;https://www.youtube.com/watch?v=RaJdhU7qWVk
+péntek;mozi;Rocky Horror Picture Show;Minden idők filmje;https://www.bemmozi.hu/film.php?slug=the-rocky-horror-picture-show;https://www.youtube.com/watch?v=u1O2-oFmWXM
+egész héten;mozi;Argentin történetek;Tizenhat történet, nem csak vicces.;https://www.cirkogejzir.hu/filmek/argentin-tortenetek/1218/;https://www.youtube.com/watch?v=RXcx0BF5jO8
+péntek;koncert;1. Hézag táncest;10-ig punk, aztán technó;https://www.facebook.com/photo/?fbid=1129917346368385&set=a.195395819820547&locale=hu_HU;https://www.youtube.com/watch?v=W2Z6-OR4RKo
+csütörtök;koncert;Wazard;Diák grunge;https://fb.me/e/76cX3uD15;https://www.youtube.com/watch?v=FH2MQSdxX0M
+csütörtök;kiállítás;Rajzolt terek;Egy képzős tanár grafikái az elmúlt 40 évből;;https://www.mke.hu/res/mke_rajzolt_terek002b.jpg
+szerda;dolog;A Képző titkos terei;Izgalmas séta a Képzőművészeti Egyetemen;https://www.mke.hu/aktualis/index.php?mid=aFdLcvKIeQLRff5CCFowCs;https://www.mke.hu/res/foepuleti_seta_uj_2026_osz_tel_ok_valasztott_300x200_fekvo.jpg
+csütörtök;koncert;Lemezjátszó;Fekete Giorgio Arctic Monkeys-t hallgat;https://b32kulturter.hu/esemeny/lemezjatszo-fekete-giorgio-arctic-monkeys-am/;
+szombat;dolog;Add tovább!;Könyvcserebere;https://b32kulturter.hu/add-tovabb-konyvcsere-a-konyvbulin/;https://b32kulturter.hu/wp-content/uploads/2026/08/add-tovabb.jpeg
+vasárnap;dolog;Zeneakadémia épületlátogatás;Igazi gesamtktnst, építészet és komoyl zene.;https://koncert.zeneakademia.hu/programok/2026-09-20-epuletlatogatas-es-kiskoncert-14668;
+szerda;kiállítás;ÉVA²;Egy animációs rendező nagymama és egy festő unoka, közben francia ellenállás, 50-es évek.;https://www.facebook.com/events/2234928597352687/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22search%22%7D%2C%7B%22mechanism%22%3A%22attachment%22%2C%22surface%22%3A%22newsfeed%22%7D]%2C%22ref_notif_type%22%3Anull%7D;https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/780543529_1907738853925967_8144808934679374852_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1073&ctp=s2048x1073&_nc_cat=109&ccb=1-7&_nc_sid=75d36f&_nc_ohc=1pRvFd4O_UwQ7kNvwHguT-1&_nc_oc=AdpuN-gVsvAPkMt4-pwSGOTWVlvlY6OwwfIcPV5IgwosOxmQ8u7NkMR4zSx1AW0dYvSOvhzJIbxRryyKBFXUbO3e&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=V6CITOJDK6G6zJvTY3G5Bg&_nc_ss=7b2a8&oh=00_AQIpA-7oxqYFz9eHJqK0NQf5lOjTQvoKsqoU8GNEa1J0VQ&oe=6AAB4BCA
+egész héten;kiállítás;Tekintet;Kiállítás a női létről a metrómegállóban.;https://www.facebook.com/events/m%C3%B3ricz-zsigmond-k%C3%B6rt%C3%A9r-budapest-magyarorsz%C3%A1g/tekintet/1695525321558303/;https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/785944568_10243700929401678_3335260650115500580_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1220&ctp=s2048x1220&_nc_cat=102&ccb=1-7&_nc_sid=75d36f&_nc_ohc=blGFtYEbnQwQ7kNvwENMXl8&_nc_oc=AdoUsukfwYsuCrCKD39p1Y-FqqCD7Ifoh0--dit6pkGWc3t1dhLsr3JfH6HdjmEYKq3w5W2JZgbp_C4o9W9bifFA&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=Vz4OGUpTZ4_zPY3mXkGyMw&_nc_ss=7b2a8&oh=00_AQIAB5oGBrvcEZFE7AhHNyUnUJjG4YNM5chdcQiRZnFVBA&oe=6AAB5713
+szombat;dolog;Kulturális Örökség Napjai;Rendezvények, séták, helyszínek bemutatása, többnyire ingyen;https://oroksegnapok.gov.hu/;https://oroksegnapok.gov.hu/images/kavics.png
+vasárnap;dolog;Kulturális Örökség Napjai;Rendezvények, séták, helyszínek bemutatása, többnyire ingyen;https://oroksegnapok.gov.hu/;https://oroksegnapok.gov.hu/images/kavics.png
+péntek;mozi;Szigorúan piszkos ügyek;Annyira jó thriller, hogy Scorcese megcsinálta magának és az sem lett ilyen jó, pedig DiCaprio is volt benne.;https://www.facebook.com/events/926466586621832/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22external_search_engine%22%7D%2C%7B%22mechanism%22%3A%22attachment%22%2C%22surface%22%3A%22newsfeed%22%7D]%2C%22ref_notif_type%22%3Anull%7D&locale=hu_HU;https://www.youtube.com/watch?v=GNCv6zj8tIg
+csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home kiállításon;https://neo.millenniumhaza.hu/programok/kuratori-tarlatvezetes-i-vasarely-dont-go-home-9-17;https://neo.millenniumhaza.hu/storage/893/responsive-images/meghosszabbitva_vasarely_kuratori_tarlatvezetes_1920x1080___responsive_1920_1080.jpg`;
+
+    const CATEGORY_COLORS = {
+      "mozi": { badge: "rgba(220, 38, 38, 0.15)", text: "#dc2626", icon: "🎬", label: "Mozi" },
+      "koncert": { badge: "rgba(147, 51, 234, 0.15)", text: "#9333ea", icon: "🎵", label: "Koncert" },
+      "kiállítás": { badge: "rgba(5, 150, 105, 0.15)", text: "#059669", icon: "🎨", label: "Kiállítás" },
+      "dolog": { badge: "rgba(37, 99, 235, 0.15)", text: "#2563eb", icon: "✨", label: "Egyéb program" }
+    };
+
+    const DAY_ORDER = {
+      "egész héten": 0, "hétfő": 1, "kedd": 2, "szerda": 3,
+      "csütörtök": 4, "péntek": 5, "szombat": 6, "vasárnap": 7
+    };
+
+    const DAY_LABELS = {
+      "egész héten": "Egész héten", "hétfő": "Hétfő", "szerda": "Szerda",
+      "csütörtök": "Csütörtök", "péntek": "Péntek", "szombat": "Szombat", "vasárnap": "Vasárnap"
+    };
+
+    function formatHungarianTitle(str) {
+      if (!str) return '';
+      let t = str.trim();
+      if (t === 'Kulturális Örökség Napjai') return 'Kulturális örökség napjai';
+      return t;
+    }
+
+    function extractYoutubeId(url) {
+      if (!url) return null;
+      const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      return match ? match[1] : null;
+    }
+
+    function parseCsv(text) {
+      const lines = text.trim().split(/\r?\n/);
+      const programs = [];
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        const cols = line.split(';');
+        const day = (cols[0] || '').trim();
+        const cat = (cols[1] || '').trim();
+        const title = formatHungarianTitle(cols[2] || '');
+        const desc = (cols[3] || '').trim();
+        const link = (cols[4] || '').trim();
+        const media = (cols[5] || '').trim();
+        const ytId = extractYoutubeId(media);
+
+        programs.push({
+          id: i,
+          day: day,
+          dayLabel: DAY_LABELS[day.toLowerCase()] || day.charAt(0).toUpperCase() + day.slice(1),
+          category: cat,
+          categoryLabel: (CATEGORY_COLORS[cat.toLowerCase()] && CATEGORY_COLORS[cat.toLowerCase()].label) || cat,
+          title: title,
+          description: desc,
+          link: link,
+          mediaLink: media,
+          mediaType: ytId ? 'youtube' : (media.startsWith('http') ? 'image' : 'none'),
+          youtubeId: ytId
+        });
+      }
+      return programs;
+    }
+
+    let PROGRAMS = [];
+    let activeCategory = 'all';
+    let activeDay = 'all';
+    let searchQuery = '';
+    let sortMode = 'original';
+    let isListView = false;
+
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    const programGrid = document.getElementById('programGrid');
+    const resultsCount = document.getElementById('resultsCount');
+    const sortSelect = document.getElementById('sortSelect');
+    const gridBtn = document.getElementById('gridBtn');
+    const listBtn = document.getElementById('listBtn');
+    const videoModal = document.getElementById('videoModal');
+    const videoModalBody = document.getElementById('videoModalBody');
+    const videoModalTitle = document.getElementById('videoModalTitle');
+    const closeVideoModalBtn = document.getElementById('closeVideoModalBtn');
+
+    function updateChipButtons(containerSelector, activeVal, dataAttr) {
+      document.querySelectorAll(`${containerSelector} .chip-btn`).forEach(btn => {
+        btn.classList.toggle('active', btn.dataset[dataAttr] === activeVal);
+      });
+    }
+
+    function getFilteredAndSortedPrograms() {
+      let result = PROGRAMS.filter(item => {
+        if (activeCategory !== 'all' && item.category !== activeCategory) return false;
+        if (activeDay !== 'all' && item.day.toLowerCase() !== activeDay.toLowerCase()) return false;
+        if (searchQuery.trim() !== '') {
+          const q = searchQuery.toLowerCase().trim();
+          const matchTitle = item.title.toLowerCase().includes(q);
+          const matchDesc = item.description.toLowerCase().includes(q);
+          const matchDay = item.dayLabel.toLowerCase().includes(q);
+          const matchCat = item.categoryLabel.toLowerCase().includes(q);
+          if (!matchTitle && !matchDesc && !matchDay && !matchCat) return false;
+        }
+        return true;
+      });
+
+      if (sortMode === 'day') {
+        result.sort((a, b) => (DAY_ORDER[a.day] ?? 99) - (DAY_ORDER[b.day] ?? 99));
+      } else if (sortMode === 'title') {
+        result.sort((a, b) => a.title.localeCompare(b.title, 'hu'));
+      } else {
+        result.sort((a, b) => a.id - b.id);
+      }
+      return result;
+    }
+
+    function renderPrograms() {
+      const items = getFilteredAndSortedPrograms();
+      resultsCount.innerHTML = `Összesen <strong>${items.length} program</strong> található`;
+
+      if (items.length === 0) {
+        programGrid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3 class="empty-title">Nincs találat a megadott feltételekkel</h3>
+            <p class="empty-desc">Próbáld meg módosítani a keresőszót, vagy kapcsolj ki egy-egy szűrőt!</p>
+            <button class="btn-reset-filters" onclick="resetFilters()">Összes szűrő törlése</button>
+          </div>
+        `;
+        return;
+      }
+
+      programGrid.className = `program-grid ${isListView ? 'list-view' : ''}`;
+
+      programGrid.innerHTML = items.map(item => {
+        const catInfo = CATEGORY_COLORS[item.category.toLowerCase()] || { badge: "rgba(0,0,0,0.05)", text: "#333", icon: "📌", label: item.category };
+
+        let mediaHtml = '';
+        if (item.mediaType === 'youtube' && item.youtubeId) {
+          const thumbUrl = `https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg`;
+          mediaHtml = `
+            <div class="card-media-wrapper" style="cursor: pointer;" onclick="openVideoModal('${item.youtubeId}', '${item.title.replace(/'/g, "\\'")}')" title="Videó előzetes lejátszása">
+              <img src="${thumbUrl}" alt="${item.title}" loading="lazy" />
+              <div class="yt-badge-overlay">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </div>
+            </div>
+          `;
+        } else if (item.mediaType === 'image' && item.mediaLink) {
+          mediaHtml = `
+            <div class="card-media-wrapper">
+              <img 
+                src="${item.mediaLink}" 
+                alt="${item.title}" 
+                loading="lazy" 
+                referrerpolicy="no-referrer"
+                onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'card-media-placeholder\\'><span class=\\'icon\\'>${catInfo.icon}</span><strong>${item.title}</strong></div>';"
+              />
+            </div>
+          `;
+        } else {
+          mediaHtml = `
+            <div class="card-media-wrapper">
+              <div class="card-media-placeholder">
+                <span class="icon">${catInfo.icon}</span>
+                <span style="font-weight:600; font-size: 0.95rem;">${item.categoryLabel}</span>
+              </div>
+            </div>
+          `;
+        }
+
+        const extBtn = item.link ? `
+          <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="btn-ext-card" title="Részletek az eredeti oldalon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+          </a>
+        ` : '';
+
+        return `
+          <div class="program-card">
+            ${mediaHtml}
+            <div class="card-body">
+              <div class="card-content-col">
+                <div class="card-meta-row">
+                  <span class="card-badge card-badge-day">
+                    📅 ${item.dayLabel}
+                  </span>
+                  <span class="card-badge" style="background: ${catInfo.badge}; color: ${catInfo.text};">
+                    ${catInfo.icon} ${item.categoryLabel}
+                  </span>
+                </div>
+                <h2 class="card-title">${item.title}</h2>
+                <p class="card-description">${item.description}</p>
+              </div>
+
+              <div class="card-footer-actions">
+                <a href="prezentacio.html?slide=${item.id}" class="btn-pres-card" title="Megnyitás a diavetítésben">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  Diavetítés nézet
+                </a>
+                ${extBtn}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function resetFilters() {
+      activeCategory = 'all';
+      activeDay = 'all';
+      searchQuery = '';
+      searchInput.value = '';
+      clearSearchBtn.style.display = 'none';
+      updateChipButtons('#categoryFilters', 'all', 'category');
+      updateChipButtons('#dayFilters', 'all', 'day');
+      renderPrograms();
+    }
+
+    function openVideoModal(youtubeId, title) {
+      videoModalTitle.textContent = title;
+      videoModalBody.innerHTML = `
+        <iframe 
+          src="https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0" 
+          title="${title}" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowfullscreen>
+        </iframe>
+      `;
+      videoModal.classList.add('active');
+    }
+
+    function closeVideoModal() {
+      videoModal.classList.remove('active');
+      videoModalBody.innerHTML = '';
+    }
+
+    closeVideoModalBtn.addEventListener('click', closeVideoModal);
+    videoModal.addEventListener('click', (e) => {
+      if (e.target === videoModal) closeVideoModal();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && videoModal.classList.contains('active')) {
+        closeVideoModal();
+      }
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      clearSearchBtn.style.display = searchQuery ? 'flex' : 'none';
+      renderPrograms();
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      searchQuery = '';
+      searchInput.value = '';
+      clearSearchBtn.style.display = 'none';
+      renderPrograms();
+      searchInput.focus();
+    });
+
+    document.querySelectorAll('#categoryFilters .chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeCategory = btn.dataset.category;
+        updateChipButtons('#categoryFilters', activeCategory, 'category');
+        renderPrograms();
+      });
+    });
+
+    document.querySelectorAll('#dayFilters .chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeDay = btn.dataset.day;
+        updateChipButtons('#dayFilters', activeDay, 'day');
+        renderPrograms();
+      });
+    });
+
+    sortSelect.addEventListener('change', (e) => {
+      sortMode = e.target.value;
+      renderPrograms();
+    });
+
+    gridBtn.addEventListener('click', () => {
+      isListView = false;
+      gridBtn.classList.add('active');
+      listBtn.classList.remove('active');
+      renderPrograms();
+    });
+
+    listBtn.addEventListener('click', () => {
+      isListView = true;
+      listBtn.classList.add('active');
+      gridBtn.classList.remove('active');
+      renderPrograms();
+    });
+
+    async function init() {
+      let csvContent = '';
+      try {
+        const res = await fetch('progaj.csv');
+        if (res.ok) csvContent = await res.text();
+      } catch (e) {}
+
+      if (!csvContent) csvContent = FALLBACK_CSV;
+      PROGRAMS = parseCsv(csvContent);
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('q')) {
+        searchQuery = params.get('q');
+        searchInput.value = searchQuery;
+        clearSearchBtn.style.display = 'flex';
+      }
+      renderPrograms();
+    }
+
+    init();
+  </script>
+</body>
+</html>

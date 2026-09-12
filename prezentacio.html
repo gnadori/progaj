@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarka-barka programajánló – Prezentáció</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0d14;
+      --bg-surface: #121824;
+      --bg-card: rgba(26, 34, 51, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(99, 102, 241, 0.3);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-color: #6366f1;
+      --accent-gradient: linear-gradient(135deg, #6366f1, #a855f7);
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ambient-glow {
+      position: absolute;
+      top: 20%;
+      left: 30%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(10, 13, 20, 0) 70%);
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+      transition: all 0.8s ease;
+    }
+
+    .ambient-glow-alt {
+      position: absolute;
+      bottom: 10%;
+      right: 20%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(10, 13, 20, 0) 70%);
+      filter: blur(90px);
+      z-index: 0;
+      pointer-events: none;
+      transition: all 0.8s ease;
+    }
+
+    /* Fejléc */
+    header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 2rem;
+      background: rgba(10, 13, 20, 0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 40%, #cbd5e1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-tag {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      font-weight: 600;
+      margin-left: 0.25rem;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .nav-btn-highlight {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #c7d2fe;
+    }
+
+    .nav-btn-highlight:hover {
+      background: rgba(99, 102, 241, 0.3);
+      border-color: rgba(99, 102, 241, 0.6);
+      color: #ffffff;
+    }
+
+    /* Folyamatjelző csík */
+    .progress-bar-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-gradient);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.8);
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Fő bemutató szekció */
+    main {
+      flex: 1;
+      position: relative;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem 3rem;
+      overflow: hidden;
+    }
+
+    .slide-wrapper {
+      width: 100%;
+      max-width: 1320px;
+      height: 100%;
+      max-height: 720px;
+      display: flex;
+      align-items: stretch;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      animation: slideFadeIn 0.35s ease-out;
+    }
+
+    @keyframes slideFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.985) translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Média terület */
+    .media-stage {
+      flex: 1.25;
+      background: #000000;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .media-stage iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      aspect-ratio: 16 / 9;
+    }
+
+    .media-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .media-stage img:hover {
+      transform: scale(1.02);
+    }
+
+    .media-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+      text-align: center;
+      background: radial-gradient(circle at center, rgba(30, 41, 59, 0.7), #0a0d14);
+      position: relative;
+    }
+
+    .placeholder-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: 0.5;
+    }
+
+    .placeholder-icon {
+      font-size: 4.5rem;
+      margin-bottom: 1.25rem;
+      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+      position: relative;
+      z-index: 2;
+    }
+
+    .placeholder-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      position: relative;
+      z-index: 2;
+      max-width: 420px;
+      line-height: 1.35;
+    }
+
+    /* Tartalom terület */
+    .content-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2.75rem 2.5rem;
+      overflow-y: auto;
+      background: linear-gradient(180deg, rgba(20, 27, 45, 0.5) 0%, rgba(12, 16, 26, 0.7) 100%);
+    }
+
+    .content-header {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.825rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      border: 1px solid transparent;
+      text-transform: capitalize;
+    }
+
+    .badge-day {
+      background: rgba(255, 255, 255, 0.08);
+      color: #f1f5f9;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .program-title {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      text-wrap: balance;
+    }
+
+    .program-description {
+      font-size: 1.125rem;
+      line-height: 1.65;
+      color: #cbd5e1;
+      font-weight: 400;
+      margin-top: 0.5rem;
+    }
+
+    .content-footer {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .action-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .btn-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.4rem;
+      background: var(--accent-gradient);
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-link:hover {
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.55);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.2rem;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    /* Alsó vezérlősáv */
+    footer {
+      position: relative;
+      z-index: 10;
+      padding: 0.85rem 2rem;
+      background: rgba(10, 13, 20, 0.85);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .slide-counter-box {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .current-slide-num {
+      color: #ffffff;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .playback-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .ctrl-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .ctrl-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: scale(1.05);
+    }
+
+    .ctrl-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .ctrl-btn-primary {
+      background: var(--accent-gradient);
+      border: none;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+    }
+
+    .hint-legend {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .kbd-tag {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.15rem 0.45rem;
+      border-radius: 5px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+    }
+
+    /* Összes dia fiók */
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 50;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .drawer-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .drawer-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(480px, 92vw);
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-color);
+      z-index: 51;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .drawer-overlay.active .drawer-panel {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .drawer-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .drawer-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .drawer-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .drawer-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .drawer-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .drawer-item.active {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .drawer-item-num {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      width: 24px;
+    }
+
+    .drawer-item-title {
+      font-size: 0.925rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .drawer-item-meta {
+      font-size: 0.775rem;
+      color: var(--text-secondary);
+      margin-top: 0.15rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 960px) {
+      body {
+        overflow-y: auto;
+      }
+      main {
+        padding: 1rem;
+      }
+      .slide-wrapper {
+        flex-direction: column;
+        max-height: none;
+        height: auto;
+      }
+      .media-stage {
+        flex: none;
+        height: 280px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .content-stage {
+        padding: 1.75rem 1.5rem;
+      }
+      .program-title {
+        font-size: 1.65rem;
+      }
+      .hint-legend {
+        display: none;
+      }
+      header, footer {
+        padding: 0.75rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow" id="ambientGlow"></div>
+  <div class="ambient-glow-alt" id="ambientGlowAlt"></div>
+
+  <!-- Fejléc -->
+  <header>
+    <a href="kereso.html" class="brand">
+      <div class="brand-icon">✨</div>
+      <div>
+        <span class="brand-title">Tarka-barka programajánló</span>
+        <span class="brand-tag">Prezentáció</span>
+      </div>
+    </a>
+
+    <div class="nav-actions">
+      <a href="kereso.html" class="nav-btn nav-btn-highlight">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        Kereső nézet
+      </a>
+      <button class="nav-btn" id="openDrawerBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Összes dia
+      </button>
+      <button class="nav-btn" id="fullscreenBtn" title="Teljes képernyő">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Folyamatjelző csík -->
+  <div class="progress-bar-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Fő színpad -->
+  <main id="mainContainer">
+    <div class="slide-wrapper" id="slideCard">
+      <!-- Dinamikus dia -->
+    </div>
+  </main>
+
+  <!-- Alsó sáv -->
+  <footer>
+    <div class="slide-counter-box">
+      <span class="current-slide-num" id="currentSlideDisplay">1</span>
+      <span>/</span>
+      <span id="totalSlidesDisplay">17</span>
+      <span style="margin-left: 0.5rem; font-size: 0.85rem; font-weight: 400; color: var(--text-muted);" id="slideCategoryLabel"></span>
+    </div>
+
+    <div class="playback-controls">
+      <button class="ctrl-btn" id="prevBtn" title="Előző program (Balra nyíl)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <button class="ctrl-btn ctrl-btn-primary" id="nextBtn" title="Következő program (Jobbra nyíl vagy Szóköz)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="hint-legend">
+      <span><span class="kbd-tag">←</span> <span class="kbd-tag">→</span> vagy <span class="kbd-tag">Szóköz</span> léptetés</span>
+      <span><span class="kbd-tag">F</span> teljes képernyő</span>
+    </div>
+  </footer>
+
+  <!-- Drawer -->
+  <div class="drawer-overlay" id="drawerOverlay">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <h3>Programok listája</h3>
+        <button class="drawer-close-btn" id="closeDrawerBtn">&times;</button>
+      </div>
+      <div class="drawer-list" id="drawerList"></div>
+    </div>
+  </div>
+
+  <script>
+    // Beágyazott tartalék CSV, ha közvetlenül fájlrendszerből (file://) nyitják meg
+    const FALLBACK_CSV = `Mikor;Milyen dolog;Micsoda;Leírás;Link;Képlink
+egész héten;kiállítás;Voltunk, mint ti. Arcrekonstrukciók a római korból;Antropológiai és genetikai vizsgálatok alapján próbálják rekonstruálni, kik éltek itt a római korban.;https://www.aquincum.hu/kiallitas/voltunk-mint-ti-arcrekonstrukciok-romai-korbol/;
+hétfő;mozi;Ádám almái;Egy hitetlen neonáci és egy hívő pap, meg egy almafa. Mi kellhet még?;https://www.bemmozi.hu/film.php?slug=%C3%A1d%C3%A1m-alm%C3%A1i-adams-aebler-bemutat%C3%B3;https://www.youtube.com/watch?v=RaJdhU7qWVk
+péntek;mozi;Rocky Horror Picture Show;Minden idők filmje;https://www.bemmozi.hu/film.php?slug=the-rocky-horror-picture-show;https://www.youtube.com/watch?v=u1O2-oFmWXM
+egész héten;mozi;Argentin történetek;Tizenhat történet, nem csak vicces.;https://www.cirkogejzir.hu/filmek/argentin-tortenetek/1218/;https://www.youtube.com/watch?v=RXcx0BF5jO8
+péntek;koncert;1. Hézag táncest;10-ig punk, aztán technó;https://www.facebook.com/photo/?fbid=1129917346368385&set=a.195395819820547&locale=hu_HU;https://www.youtube.com/watch?v=W2Z6-OR4RKo
+csütörtök;koncert;Wazard;Diák grunge;https://fb.me/e/76cX3uD15;https://www.youtube.com/watch?v=FH2MQSdxX0M
+csütörtök;kiállítás;Rajzolt terek;Egy képzős tanár grafikái az elmúlt 40 évből;;https://www.mke.hu/res/mke_rajzolt_terek002b.jpg
+szerda;dolog;A Képző titkos terei;Izgalmas séta a Képzőművészeti Egyetemen;https://www.mke.hu/aktualis/index.php?mid=aFdLcvKIeQLRff5CCFowCs;https://www.mke.hu/res/foepuleti_seta_uj_2026_osz_tel_ok_valasztott_300x200_fekvo.jpg
+csütörtök;koncert;Lemezjátszó;Fekete Giorgio Arctic Monkeys-t hallgat;https://b32kulturter.hu/esemeny/lemezjatszo-fekete-giorgio-arctic-monkeys-am/;
+szombat;dolog;Add tovább!;Könyvcserebere;https://b32kulturter.hu/add-tovabb-konyvcsere-a-konyvbulin/;https://b32kulturter.hu/wp-content/uploads/2026/08/add-tovabb.jpeg
+vasárnap;dolog;Zeneakadémia épületlátogatás;Igazi gesamtktnst, építészet és komoyl zene.;https://koncert.zeneakademia.hu/programok/2026-09-20-epuletlatogatas-es-kiskoncert-14668;
+szerda;kiállítás;ÉVA²;Egy animációs rendező nagymama és egy festő unoka, közben francia ellenállás, 50-es évek.;https://www.facebook.com/events/2234928597352687/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22search%22%7D%2C%7B%22mechanism%22%3A%22attachment%22%2C%22surface%22%3A%22newsfeed%22%7D]%2C%22ref_notif_type%22%3Anull%7D;https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/780543529_1907738853925967_8144808934679374852_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1073&ctp=s2048x1073&_nc_cat=109&ccb=1-7&_nc_sid=75d36f&_nc_ohc=1pRvFd4O_UwQ7kNvwHguT-1&_nc_oc=AdpuN-gVsvAPkMt4-pwSGOTWVlvlY6OwwfIcPV5IgwosOxmQ8u7NkMR4zSx1AW0dYvSOvhzJIbxRryyKBFXUbO3e&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=V6CITOJDK6G6zJvTY3G5Bg&_nc_ss=7b2a8&oh=00_AQIpA-7oxqYFz9eHJqK0NQf5lOjTQvoKsqoU8GNEa1J0VQ&oe=6AAB4BCA
+egész héten;kiállítás;Tekintet;Kiállítás a női létről a metrómegállóban.;https://www.facebook.com/events/m%C3%B3ricz-zsigmond-k%C3%B6rt%C3%A9r-budapest-magyarorsz%C3%A1g/tekintet/1695525321558303/;https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/785944568_10243700929401678_3335260650115500580_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1220&ctp=s2048x1220&_nc_cat=102&ccb=1-7&_nc_sid=75d36f&_nc_ohc=blGFtYEbnQwQ7kNvwENMXl8&_nc_oc=AdoUsukfwYsuCrCKD39p1Y-FqqCD7Ifoh0--dit6pkGWc3t1dhLsr3JfH6HdjmEYKq3w5W2JZgbp_C4o9W9bifFA&_nc_zt=23&_nc_ht=scontent-vie1-1.xx&_nc_gid=Vz4OGUpTZ4_zPY3mXkGyMw&_nc_ss=7b2a8&oh=00_AQIAB5oGBrvcEZFE7AhHNyUnUJjG4YNM5chdcQiRZnFVBA&oe=6AAB5713
+szombat;dolog;Kulturális Örökség Napjai;Rendezvények, séták, helyszínek bemutatása, többnyire ingyen;https://oroksegnapok.gov.hu/;https://oroksegnapok.gov.hu/images/kavics.png
+vasárnap;dolog;Kulturális Örökség Napjai;Rendezvények, séták, helyszínek bemutatása, többnyire ingyen;https://oroksegnapok.gov.hu/;https://oroksegnapok.gov.hu/images/kavics.png
+péntek;mozi;Szigorúan piszkos ügyek;Annyira jó thriller, hogy Scorcese megcsinálta magának és az sem lett ilyen jó, pedig DiCaprio is volt benne.;https://www.facebook.com/events/926466586621832/?acontext=%7B%22event_action_history%22%3A[%7B%22surface%22%3A%22external_search_engine%22%7D%2C%7B%22mechanism%22%3A%22attachment%22%2C%22surface%22%3A%22newsfeed%22%7D]%2C%22ref_notif_type%22%3Anull%7D&locale=hu_HU;https://www.youtube.com/watch?v=GNCv6zj8tIg
+csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home kiállításon;https://neo.millenniumhaza.hu/programok/kuratori-tarlatvezetes-i-vasarely-dont-go-home-9-17;https://neo.millenniumhaza.hu/storage/893/responsive-images/meghosszabbitva_vasarely_kuratori_tarlatvezetes_1920x1080___responsive_1920_1080.jpg`;
+
+    const CATEGORY_COLORS = {
+      "mozi": { badge: "rgba(220, 38, 38, 0.15)", text: "#fca5a5", icon: "🎬", label: "Mozi" },
+      "koncert": { badge: "rgba(147, 51, 234, 0.15)", text: "#d8b4fe", icon: "🎵", label: "Koncert" },
+      "kiállítás": { badge: "rgba(5, 150, 105, 0.15)", text: "#6ee7b7", icon: "🎨", label: "Kiállítás" },
+      "dolog": { badge: "rgba(37, 99, 235, 0.15)", text: "#93c5fd", icon: "✨", label: "Egyéb program" }
+    };
+
+    const DAY_LABELS = {
+      "egész héten": "Egész héten",
+      "hétfő": "Hétfő",
+      "szerda": "Szerda",
+      "csütörtök": "Csütörtök",
+      "péntek": "Péntek",
+      "szombat": "Szombat",
+      "vasárnap": "Vasárnap"
+    };
+
+    const CATEGORY_THEMES = {
+      'mozi': { primary: 'rgba(239, 68, 68, 0.22)', secondary: 'rgba(249, 115, 22, 0.15)' },
+      'koncert': { primary: 'rgba(168, 85, 247, 0.22)', secondary: 'rgba(99, 102, 241, 0.18)' },
+      'kiállítás': { primary: 'rgba(16, 185, 129, 0.22)', secondary: 'rgba(14, 165, 233, 0.15)' },
+      'dolog': { primary: 'rgba(59, 130, 246, 0.22)', secondary: 'rgba(147, 51, 234, 0.15)' }
+    };
+
+    // Magyar helyesírási címformázó: csak az első szó nagybetű (és tulajdonnevek)
+    function formatHungarianTitle(str) {
+      if (!str) return '';
+      let t = str.trim();
+      if (t === 'Kulturális Örökség Napjai') return 'Kulturális örökség napjai';
+      return t;
+    }
+
+    function extractYoutubeId(url) {
+      if (!url) return null;
+      const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+      return match ? match[1] : null;
+    }
+
+    function parseCsv(text) {
+      const lines = text.trim().split(/\r?\n/);
+      const programs = [];
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+        const cols = line.split(';');
+        const day = (cols[0] || '').trim();
+        const cat = (cols[1] || '').trim();
+        const title = formatHungarianTitle(cols[2] || '');
+        const desc = (cols[3] || '').trim();
+        const link = (cols[4] || '').trim();
+        const media = (cols[5] || '').trim();
+        const ytId = extractYoutubeId(media);
+
+        programs.push({
+          id: i,
+          day: day,
+          dayLabel: DAY_LABELS[day.toLowerCase()] || day.charAt(0).toUpperCase() + day.slice(1),
+          category: cat,
+          categoryLabel: (CATEGORY_COLORS[cat.toLowerCase()] && CATEGORY_COLORS[cat.toLowerCase()].label) || cat,
+          title: title,
+          description: desc,
+          link: link,
+          mediaLink: media,
+          mediaType: ytId ? 'youtube' : (media.startsWith('http') ? 'image' : 'none'),
+          youtubeId: ytId
+        });
+      }
+      return programs;
+    }
+
+    let PROGRAMS = [];
+    let currentIndex = 0;
+
+    async function init() {
+      let csvContent = '';
+      try {
+        const res = await fetch('progaj.csv');
+        if (res.ok) csvContent = await res.text();
+      } catch (e) {}
+
+      if (!csvContent) csvContent = FALLBACK_CSV;
+      PROGRAMS = parseCsv(csvContent);
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('slide')) {
+        const s = parseInt(params.get('slide'), 10);
+        if (!isNaN(s) && s >= 1 && s <= PROGRAMS.length) {
+          currentIndex = s - 1;
+        }
+      }
+
+      totalSlidesDisplay.textContent = PROGRAMS.length;
+      renderSlide(currentIndex);
+      populateDrawer();
+    }
+
+    const slideCard = document.getElementById('slideCard');
+    const progressBar = document.getElementById('progressBar');
+    const currentSlideDisplay = document.getElementById('currentSlideDisplay');
+    const totalSlidesDisplay = document.getElementById('totalSlidesDisplay');
+    const slideCategoryLabel = document.getElementById('slideCategoryLabel');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const ambientGlow = document.getElementById('ambientGlow');
+    const ambientGlowAlt = document.getElementById('ambientGlowAlt');
+
+    function renderSlide(index) {
+      if (!PROGRAMS.length) return;
+      const item = PROGRAMS[index];
+      const catInfo = CATEGORY_COLORS[item.category.toLowerCase()] || { badge: "rgba(255,255,255,0.1)", text: "#fff", icon: "📌", label: item.category };
+      const theme = CATEGORY_THEMES[item.category.toLowerCase()] || CATEGORY_THEMES['dolog'];
+
+      ambientGlow.style.background = `radial-gradient(circle, ${theme.primary} 0%, rgba(10, 13, 20, 0) 70%)`;
+      ambientGlowAlt.style.background = `radial-gradient(circle, ${theme.secondary} 0%, rgba(10, 13, 20, 0) 70%)`;
+
+      let mediaHtml = '';
+      if (item.mediaType === 'youtube' && item.youtubeId) {
+        mediaHtml = `
+          <div class="media-stage">
+            <iframe 
+              src="https://www.youtube-nocookie.com/embed/${item.youtubeId}?rel=0&modestbranding=1&enablejsapi=1" 
+              title="${item.title}" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+              allowfullscreen>
+            </iframe>
+          </div>
+        `;
+      } else if (item.mediaType === 'image' && item.mediaLink) {
+        mediaHtml = `
+          <div class="media-stage">
+            <img 
+              src="${item.mediaLink}" 
+              alt="${item.title}" 
+              referrerpolicy="no-referrer"
+              onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'media-placeholder\\'><div class=\\'placeholder-icon\\'>${catInfo.icon}</div><div class=\\'placeholder-title\\'>${item.title}</div></div>';"
+            />
+          </div>
+        `;
+      } else {
+        mediaHtml = `
+          <div class="media-stage">
+            <div class="media-placeholder">
+              <div class="placeholder-pattern"></div>
+              <div class="placeholder-icon">${catInfo.icon}</div>
+              <div class="placeholder-title">${item.title}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const actionHtml = item.link ? `
+        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="btn-link">
+          <span>Részletek megnyitása</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      ` : '';
+
+      slideCard.style.animation = 'none';
+      void slideCard.offsetWidth;
+      slideCard.style.animation = 'slideFadeIn 0.35s ease-out';
+
+      slideCard.innerHTML = `
+        ${mediaHtml}
+        <div class="content-stage">
+          <div class="content-header">
+            <div class="meta-tags">
+              <span class="badge badge-day">
+                📅 ${item.dayLabel}
+              </span>
+              <span class="badge" style="background: ${catInfo.badge}; color: ${catInfo.text};">
+                ${catInfo.icon} ${item.categoryLabel}
+              </span>
+            </div>
+            <h1 class="program-title">${item.title}</h1>
+            <p class="program-description">${item.description}</p>
+          </div>
+
+          <div class="content-footer">
+            <div class="action-row">
+              ${actionHtml}
+              <a href="kereso.html?q=${encodeURIComponent(item.title)}" class="btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                Keresőben megtekintés
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+
+      currentSlideDisplay.textContent = index + 1;
+      slideCategoryLabel.textContent = `• ${item.dayLabel} – ${item.categoryLabel}`;
+      progressBar.style.width = `${((index + 1) / PROGRAMS.length) * 100}%`;
+
+      prevBtn.disabled = (index === 0);
+      nextBtn.disabled = (index === PROGRAMS.length - 1);
+
+      updateDrawerActive(index);
+
+      const url = new URL(window.location);
+      url.searchParams.set('slide', index + 1);
+      window.history.replaceState({}, '', url);
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < PROGRAMS.length) {
+        currentIndex = index;
+        renderSlide(currentIndex);
+      }
+    }
+
+    prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+    nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        goToSlide(currentIndex + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        goToSlide(currentIndex - 1);
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'Escape') {
+        closeDrawer();
+      }
+    });
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+    document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    const drawerList = document.getElementById('drawerList');
+    const openDrawerBtn = document.getElementById('openDrawerBtn');
+    const closeDrawerBtn = document.getElementById('closeDrawerBtn');
+
+    function populateDrawer() {
+      drawerList.innerHTML = PROGRAMS.map((item, idx) => {
+        const catInfo = CATEGORY_COLORS[item.category.toLowerCase()] || { icon: "📌" };
+        return `
+          <div class="drawer-item ${idx === currentIndex ? 'active' : ''}" data-index="${idx}">
+            <div class="drawer-item-num">${idx + 1}.</div>
+            <div>
+              <div class="drawer-item-title">${item.title}</div>
+              <div class="drawer-item-meta">
+                <span>${catInfo.icon} ${item.categoryLabel}</span>
+                <span>•</span>
+                <span>${item.dayLabel}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      drawerList.querySelectorAll('.drawer-item').forEach(el => {
+        el.addEventListener('click', () => {
+          goToSlide(parseInt(el.getAttribute('data-index'), 10));
+          closeDrawer();
+        });
+      });
+    }
+
+    function updateDrawerActive(index) {
+      drawerList.querySelectorAll('.drawer-item').forEach((el, idx) => {
+        el.classList.toggle('active', idx === index);
+      });
+    }
+
+    function openDrawer() {
+      drawerOverlay.classList.add('active');
+    }
+
+    function closeDrawer() {
+      drawerOverlay.classList.remove('active');
+    }
+
+    openDrawerBtn.addEventListener('click', openDrawer);
+    closeDrawerBtn.addEventListener('click', closeDrawer);
+    drawerOverlay.addEventListener('click', (e) => {
+      if (e.target === drawerOverlay) closeDrawer();
+    });
+
+    init();
+  </script>
+</body>
+</html>
