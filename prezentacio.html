@@ -643,7 +643,11 @@
   <!-- Fejléc -->
   <header>
     <a href="kereso.html" class="brand">
-      <div class="brand-icon">✨</div>
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+        </svg>
+      </div>
       <div>
         <span class="brand-title">Tarka-barka programajánló</span>
         <span class="brand-tag">Prezentáció</span>
@@ -749,10 +753,10 @@ péntek;mozi;Szigorúan piszkos ügyek;Annyira jó thriller, hogy Scorcese megcs
 csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home kiállításon;https://neo.millenniumhaza.hu/programok/kuratori-tarlatvezetes-i-vasarely-dont-go-home-9-17;https://neo.millenniumhaza.hu/storage/893/responsive-images/meghosszabbitva_vasarely_kuratori_tarlatvezetes_1920x1080___responsive_1920_1080.jpg`;
 
     const CATEGORY_COLORS = {
-      "mozi": { badge: "rgba(220, 38, 38, 0.15)", text: "#fca5a5", icon: "🎬", label: "Mozi" },
-      "koncert": { badge: "rgba(147, 51, 234, 0.15)", text: "#d8b4fe", icon: "🎵", label: "Koncert" },
-      "kiállítás": { badge: "rgba(5, 150, 105, 0.15)", text: "#6ee7b7", icon: "🎨", label: "Kiállítás" },
-      "dolog": { badge: "rgba(37, 99, 235, 0.15)", text: "#93c5fd", icon: "✨", label: "Egyéb program" }
+      "mozi": { badge: "rgba(220, 38, 38, 0.15)", text: "#fca5a5", label: "Mozi" },
+      "koncert": { badge: "rgba(147, 51, 234, 0.15)", text: "#d8b4fe", label: "Koncert" },
+      "kiállítás": { badge: "rgba(5, 150, 105, 0.15)", text: "#6ee7b7", label: "Kiállítás" },
+      "dolog": { badge: "rgba(37, 99, 235, 0.15)", text: "#93c5fd", label: "Dolog" }
     };
 
     const DAY_LABELS = {
@@ -883,7 +887,7 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
     function renderSlide(index) {
       if (!PROGRAMS.length) return;
       const item = PROGRAMS[index];
-      const catInfo = CATEGORY_COLORS[item.category.toLowerCase()] || { badge: "rgba(255,255,255,0.1)", text: "#fff", icon: "📌", label: item.category };
+      const catInfo = CATEGORY_COLORS[item.category.toLowerCase()] || { badge: "rgba(255,255,255,0.1)", text: "#fff", label: item.category };
       const theme = CATEGORY_THEMES[item.category.toLowerCase()] || CATEGORY_THEMES['dolog'];
 
       ambientGlow.style.background = `radial-gradient(circle, ${theme.primary} 0%, rgba(10, 13, 20, 0) 70%)`;
@@ -908,7 +912,7 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
               src="${item.mediaLink}" 
               alt="${item.title}" 
               referrerpolicy="no-referrer"
-              onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'media-placeholder\\'><div class=\\'placeholder-icon\\'>${catInfo.icon}</div><div class=\\'placeholder-title\\'>${item.title}</div></div>';"
+              onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'media-placeholder\\'><div class=\\'placeholder-title\\'>${item.title}</div></div>';"
             />
           </div>
         `;
@@ -917,7 +921,6 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
           <div class="media-stage">
             <div class="media-placeholder">
               <div class="placeholder-pattern"></div>
-              <div class="placeholder-icon">${catInfo.icon}</div>
               <div class="placeholder-title">${item.title}</div>
             </div>
           </div>
@@ -945,10 +948,10 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
           <div class="content-header">
             <div class="meta-tags">
               <span class="badge badge-day">
-                📅 ${item.dayLabel}
+                ${item.dayLabel}
               </span>
               <span class="badge" style="background: ${catInfo.badge}; color: ${catInfo.text};">
-                ${catInfo.icon} ${item.categoryLabel}
+                ${item.categoryLabel}
               </span>
             </div>
             <h1 class="program-title">${item.title}</h1>
@@ -1025,14 +1028,13 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
 
     function populateDrawer() {
       drawerList.innerHTML = PROGRAMS.map((item, idx) => {
-        const catInfo = CATEGORY_COLORS[item.category.toLowerCase()] || { icon: "📌" };
         return `
           <div class="drawer-item ${idx === currentIndex ? 'active' : ''}" data-index="${idx}">
             <div class="drawer-item-num">${idx + 1}.</div>
             <div>
               <div class="drawer-item-title">${item.title}</div>
               <div class="drawer-item-meta">
-                <span>${catInfo.icon} ${item.categoryLabel}</span>
+                <span>${item.categoryLabel}</span>
                 <span>•</span>
                 <span>${item.dayLabel}</span>
               </div>
