@@ -847,6 +847,17 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
       return programs;
     }
 
+    const DAY_ORDER = {
+      "egész héten": 0,
+      "hétfő": 1,
+      "kedd": 2,
+      "szerda": 3,
+      "csütörtök": 4,
+      "péntek": 5,
+      "szombat": 6,
+      "vasárnap": 7
+    };
+
     let PROGRAMS = [];
     let currentIndex = 0;
 
@@ -861,10 +872,23 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
       if (!csvContent) csvContent = FALLBACK_CSV;
       PROGRAMS = parseCsv(csvContent);
 
+      // Rendezés a hét napjai szerint (időrendben)
+      PROGRAMS.sort((a, b) => {
+        const orderA = DAY_ORDER[a.day.toLowerCase()] ?? 99;
+        const orderB = DAY_ORDER[b.day.toLowerCase()] ?? 99;
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        return a.id - b.id;
+      });
+
       const params = new URLSearchParams(window.location.search);
       if (params.has('slide')) {
         const s = parseInt(params.get('slide'), 10);
-        if (!isNaN(s) && s >= 1 && s <= PROGRAMS.length) {
+        const foundIdx = PROGRAMS.findIndex(p => p.id === s);
+        if (foundIdx !== -1) {
+          currentIndex = foundIdx;
+        } else if (!isNaN(s) && s >= 1 && s <= PROGRAMS.length) {
           currentIndex = s - 1;
         }
       }
@@ -1034,9 +1058,9 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
             <div>
               <div class="drawer-item-title">${item.title}</div>
               <div class="drawer-item-meta">
-                <span>${item.categoryLabel}</span>
+                <span><strong>${item.dayLabel}</strong></span>
                 <span>•</span>
-                <span>${item.dayLabel}</span>
+                <span>${item.categoryLabel}</span>
               </div>
             </div>
           </div>
