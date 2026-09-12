@@ -804,13 +804,13 @@
         <div class="filter-group" id="dayFilters">
           <span class="filter-group-label">Nap:</span>
           <button type="button" class="chip-btn active" data-day="all">Összes nap</button>
-          <button type="button" class="chip-btn" data-day="egész héten">Egész héten</button>
           <button type="button" class="chip-btn" data-day="hétfő">Hétfő</button>
           <button type="button" class="chip-btn" data-day="szerda">Szerda</button>
           <button type="button" class="chip-btn" data-day="csütörtök">Csütörtök</button>
           <button type="button" class="chip-btn" data-day="péntek">Péntek</button>
           <button type="button" class="chip-btn" data-day="szombat">Szombat</button>
           <button type="button" class="chip-btn" data-day="vasárnap">Vasárnap</button>
+          <button type="button" class="chip-btn" data-day="egész héten">Egész héten</button>
         </div>
       </div>
     </div>
@@ -895,8 +895,14 @@ csütörtök;kiállítás;Kurátori tárlatvezetés ;A Vasarely don't go home ki
     };
 
     const DAY_ORDER = {
-      "egész héten": 0, "hétfő": 1, "kedd": 2, "szerda": 3,
-      "csütörtök": 4, "péntek": 5, "szombat": 6, "vasárnap": 7
+      "hétfő": 1,
+      "kedd": 2,
+      "szerda": 3,
+      "csütörtök": 4,
+      "péntek": 5,
+      "szombat": 6,
+      "vasárnap": 7,
+      "egész héten": 8
     };
 
     const DAY_LABELS = {
