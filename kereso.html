@@ -903,6 +903,30 @@ szombat;dolog;Nyitott piacok napja;Mindenféle izgalmas dolog piacokon;https://w
       "dolog": { badge: "rgba(37, 99, 235, 0.15)", text: "#2563eb", label: "Dolog" }
     };
 
+    const EXTRA_PALETTES = [
+      { badge: "rgba(13, 148, 136, 0.15)", text: "#0d9488" }, // Teal
+      { badge: "rgba(225, 29, 72, 0.15)", text: "#e11d48" },  // Rose
+      { badge: "rgba(2, 132, 199, 0.15)", text: "#0284c7" },  // Sky
+      { badge: "rgba(202, 138, 4, 0.15)", text: "#ca8a04" },  // Sárga/Amber
+      { badge: "rgba(109, 40, 217, 0.15)", text: "#6d28d9" }, // Lila
+      { badge: "rgba(190, 24, 93, 0.15)", text: "#be185d" }   // Rózsaszín
+    ];
+
+    function getCategoryInfo(cat) {
+      if (!cat) return { badge: "rgba(100, 116, 139, 0.15)", text: "#64748b", label: "Egyéb" };
+      const lower = cat.toLowerCase().trim();
+      if (CATEGORY_COLORS[lower]) {
+        return CATEGORY_COLORS[lower];
+      }
+      let hash = 0;
+      for (let i = 0; i < lower.length; i++) {
+        hash = (hash * 31 + lower.charCodeAt(i)) % EXTRA_PALETTES.length;
+      }
+      const pal = EXTRA_PALETTES[Math.abs(hash)];
+      const label = cat.charAt(0).toUpperCase() + cat.slice(1);
+      return { badge: pal.badge, text: pal.text, label: label };
+    }
+
     const DAY_ORDER = {
       "hétfő": 1,
       "kedd": 2,
@@ -971,12 +995,13 @@ szombat;dolog;Nyitott piacok napja;Mindenféle izgalmas dolog piacokon;https://w
         const media = (cols[5] || '').trim();
         const ytId = extractYoutubeId(media);
 
+        const catInfo = getCategoryInfo(cat);
         programs.push({
           id: i,
           day: day,
           dayLabel: DAY_LABELS[day.toLowerCase()] || (day ? day.charAt(0).toUpperCase() + day.slice(1) : ''),
           category: cat,
-          categoryLabel: (CATEGORY_COLORS[cat.toLowerCase()] && CATEGORY_COLORS[cat.toLowerCase()].label) || (cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : 'Egyéb'),
+          categoryLabel: catInfo.label,
           title: title,
           description: desc,
           link: link,
@@ -1009,13 +1034,14 @@ szombat;dolog;Nyitott piacok napja;Mindenféle izgalmas dolog piacokon;https://w
 
     function updateChipButtons(containerSelector, activeVal, dataAttr) {
       document.querySelectorAll(`${containerSelector} .chip-btn`).forEach(btn => {
-        btn.classList.toggle('active', btn.dataset[dataAttr] === activeVal);
+        const val = btn.dataset[dataAttr] || '';
+        btn.classList.toggle('active', val.toLowerCase() === (activeVal || '').toLowerCase());
       });
     }
 
     function getFilteredAndSortedPrograms() {
       let result = PROGRAMS.filter(item => {
-        if (activeCategory !== 'all' && item.category !== activeCategory) return false;
+        if (activeCategory !== 'all' && item.category.toLowerCase() !== activeCategory.toLowerCase()) return false;
         if (activeDay !== 'all' && item.day.toLowerCase() !== activeDay.toLowerCase()) return false;
         if (searchQuery.trim() !== '') {
           const q = searchQuery.toLowerCase().trim();
@@ -1029,7 +1055,7 @@ szombat;dolog;Nyitott piacok napja;Mindenféle izgalmas dolog piacokon;https://w
       });
 
       if (sortMode === 'day') {
-        result.sort((a, b) => (DAY_ORDER[a.day] ?? 99) - (DAY_ORDER[b.day] ?? 99));
+        result.sort((a, b) => (DAY_ORDER[a.day.toLowerCase()] ?? 99) - (DAY_ORDER[b.day.toLowerCase()] ?? 99));
       } else if (sortMode === 'title') {
         result.sort((a, b) => a.title.localeCompare(b.title, 'hu'));
       } else {
@@ -1062,7 +1088,7 @@ szombat;dolog;Nyitott piacok napja;Mindenféle izgalmas dolog piacokon;https://w
       programGrid.className = `program-grid ${isListView ? 'list-view' : ''}`;
 
       programGrid.innerHTML = items.map(item => {
-        const catInfo = CATEGORY_COLORS[item.category.toLowerCase()] || { badge: "rgba(0,0,0,0.05)", text: "#333", label: item.category };
+        const catInfo = getCategoryInfo(item.category);
 
         let mediaHtml = '';
         if (item.mediaType === 'youtube' && item.youtubeId) {
@@ -1195,21 +1221,71 @@ szombat;dolog;Nyitott piacok napja;Mindenféle izgalmas dolog piacokon;https://w
       searchInput.focus();
     });
 
-    document.querySelectorAll('#categoryFilters .chip-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeCategory = btn.dataset.category;
-        updateChipButtons('#categoryFilters', activeCategory, 'category');
-        renderPrograms();
+    function renderFilters() {
+      // Dinamikus kategóriaszűrő gombok generálása a CSV tartalma alapján
+      const catContainer = document.getElementById('categoryFilters');
+      const uniqueCats = [];
+      PROGRAMS.forEach(p => {
+        const c = p.category.toLowerCase().trim();
+        if (c && !uniqueCats.includes(c)) uniqueCats.push(c);
       });
-    });
 
-    document.querySelectorAll('#dayFilters .chip-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeDay = btn.dataset.day;
-        updateChipButtons('#dayFilters', activeDay, 'day');
-        renderPrograms();
+      const knownOrder = ["mozi", "színház", "koncert", "kiállítás", "dolog"];
+      uniqueCats.sort((a, b) => {
+        const idxA = knownOrder.indexOf(a);
+        const idxB = knownOrder.indexOf(b);
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return a.localeCompare(b, 'hu');
       });
-    });
+
+      let catHtml = `<span class="filter-group-label">Kategória:</span>
+        <button type="button" class="chip-btn ${activeCategory.toLowerCase() === 'all' ? 'active' : ''}" data-category="all">Összes</button>`;
+
+      uniqueCats.forEach(cat => {
+        const info = getCategoryInfo(cat);
+        const isActive = (activeCategory.toLowerCase() === cat);
+        catHtml += `<button type="button" class="chip-btn ${isActive ? 'active' : ''}" data-category="${cat}">${info.label}</button>`;
+      });
+      catContainer.innerHTML = catHtml;
+
+      catContainer.querySelectorAll('.chip-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeCategory = btn.dataset.category;
+          updateChipButtons('#categoryFilters', activeCategory, 'category');
+          renderPrograms();
+        });
+      });
+
+      // Dinamikus napszűrő gombok generálása a CSV tartalma alapján
+      const dayContainer = document.getElementById('dayFilters');
+      const uniqueDays = [];
+      PROGRAMS.forEach(p => {
+        const d = p.day.toLowerCase().trim();
+        if (d && !uniqueDays.includes(d)) uniqueDays.push(d);
+      });
+
+      uniqueDays.sort((a, b) => (DAY_ORDER[a] ?? 90) - (DAY_ORDER[b] ?? 90));
+
+      let dayHtml = `<span class="filter-group-label">Nap:</span>
+        <button type="button" class="chip-btn ${activeDay.toLowerCase() === 'all' ? 'active' : ''}" data-day="all">Összes nap</button>`;
+
+      uniqueDays.forEach(day => {
+        const label = DAY_LABELS[day] || (day.charAt(0).toUpperCase() + day.slice(1));
+        const isActive = (activeDay.toLowerCase() === day);
+        dayHtml += `<button type="button" class="chip-btn ${isActive ? 'active' : ''}" data-day="${day}">${label}</button>`;
+      });
+      dayContainer.innerHTML = dayHtml;
+
+      dayContainer.querySelectorAll('.chip-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeDay = btn.dataset.day;
+          updateChipButtons('#dayFilters', activeDay, 'day');
+          renderPrograms();
+        });
+      });
+    }
 
     sortSelect.addEventListener('change', (e) => {
       sortMode = e.target.value;
@@ -1239,6 +1315,7 @@ szombat;dolog;Nyitott piacok napja;Mindenféle izgalmas dolog piacokon;https://w
 
       if (!csvContent) csvContent = FALLBACK_CSV;
       PROGRAMS = parseCsv(csvContent);
+      renderFilters();
 
       const params = new URLSearchParams(window.location.search);
       if (params.has('q')) {
